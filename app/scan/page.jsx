@@ -2,6 +2,7 @@
 import React, { useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import Quagga from 'quagga';
+import { Button } from '@/components/ui/button';
 
 const Search = () => {
   const [barcodeData, setBarcodeData] = useState(null);
@@ -49,8 +50,14 @@ const Search = () => {
   };
 
   return (
-    <div>
-      <h1>Barcode Scanner</h1>
+    <div className="">
+
+
+    <div className='p-4 flex flex-col items-center justify-center gap-4'>
+      <div className="flex flex-col items-center justify-center  ">
+      <h1 className='text-2xl font-bold '>Barcode <span className='text-green-400'>Scanner</span></h1>
+      <h1 className='text-gray-500 text-sm'>Search for books by scanning </h1>
+      </div>
       <Webcam
         audio={false}
         ref={webcamRef}
@@ -62,13 +69,17 @@ const Search = () => {
         }}
       />
       <canvas ref={canvasRef} width={640} height={480} style={{ display: 'none' }} />
-      <button onClick={captureAndDecode}>Capture and Decode</button>
+      <div className="pt-5">
+      <Button onClick={captureAndDecode} className='bg-green-400 hover:bg-green-300'
+      >Capture and Decode</Button>
+      </div>
       {barcodeData && (
         <div>
-          <p>Barcode Data: {barcodeData}</p>
+          <p > Barcode Data: {barcodeData}</p>
         </div>
       )}
       {error && <p style={{ color: 'red' }}>{error}</p>}
+    </div>
     </div>
   );
 };

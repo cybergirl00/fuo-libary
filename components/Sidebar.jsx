@@ -4,7 +4,7 @@ import Link from 'next/link'
 const Sidebar = () => {
     return (
         <div>
-        <div className="border h-screen flex-col gap-5 p-3 justify-center hidden xl:flex">
+        <div className="border h-screen flex-col gap-5 p-3 justify-center hidden xl:flex sticky">
             <div className="p-3">
                 {/* Logo */}
            <h3 className="text-2xl font-bold ">
@@ -47,6 +47,8 @@ const Sidebar = () => {
                 <p className="text-gray-500 text-sm font-light">dikkorabiat25@gmail.com</p>
                 </div>
             </div>
+
+            
         </div>
 
 <div className="hidden sm:flex xl:hidden ">
