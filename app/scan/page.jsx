@@ -1,68 +1,74 @@
 "use client";
-import Image from "next/image";
-import { useState, useRef } from "react";
-import Webcam from "react-webcam";
-import { BrowserMultiFormatReader, NotFoundException } from '@zxing/library';
+import React, { useRef, useState } from 'react';
+import Webcam from 'react-webcam';
+import Quagga from 'quagga';
 
 const Search = () => {
-  const [image, setImage] = useState(null);
   const [barcodeData, setBarcodeData] = useState(null);
   const [error, setError] = useState(null);
   const webcamRef = useRef(null);
+  const canvasRef = useRef(null);
 
-  const handleImageCapture = () => {
+  const captureAndDecode = () => {
     const imageSrc = webcamRef.current.getScreenshot();
-    setImage(imageSrc);
+    const img = new Image();
+    img.src = imageSrc;
 
-    const codeReader = new BrowserMultiFormatReader();
-    fetch(imageSrc)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob);
-        codeReader.decodeFromImageUrl(url)
-          .then((result) => {
-            setBarcodeData(result.text);
-            setError(null);
-            URL.revokeObjectURL(url);
-          })
-          .catch((err) => {
-            if (err instanceof NotFoundException) {
-              setError("No barcode detected. Please try again.");
-            } else {
-              setError("An error occurred while decoding the barcode.");
-              console.error(err);
-            }
-            URL.revokeObjectURL(url);
-          });
-      })
-      .catch((err) => {
-        setError("An error occurred while processing the image.");
-        console.error(err);
+    img.onload = () => {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext('2d', { willReadFrequently: true });
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      Quagga.decodeSingle({
+        src: canvas.toDataURL(),
+        numOfWorkers: 0,
+        inputStream: {
+          size: 800,
+        },
+        decoder: {
+          readers: [
+            'code_128_reader',
+            'ean_reader',
+            'ean_8_reader',
+            'code_39_reader',
+            'code_39_vin_reader',
+            'codabar_reader',
+            'upc_reader',
+            'upc_e_reader',
+            'i2of5_reader'
+          ],
+        },
+      }, (result) => {
+        if (result && result.codeResult) {
+          setBarcodeData(result.codeResult.code);
+        } else {
+          setError('No barcode detected.');
+        }
       });
+    };
   };
 
   return (
     <div>
+      <h1>Barcode Scanner</h1>
       <Webcam
         audio={false}
-        height={480}
-        width={640}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
+        width={640}
+        height={480}
+        videoConstraints={{
+          facingMode: 'environment',
+        }}
       />
-      <button onClick={handleImageCapture}>Capture Image</button>
-      {image && (
+      <canvas ref={canvasRef} width={640} height={480} style={{ display: 'none' }} />
+      <button onClick={captureAndDecode}>Capture and Decode</button>
+      {barcodeData && (
         <div>
-          <Image
-            src={image}
-            alt="Captured Image"
-            width={640}
-            height={480}
-          />
-          {barcodeData && <p>Barcode Data: {barcodeData}</p>}
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <p>Barcode Data: {barcodeData}</p>
         </div>
       )}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };
