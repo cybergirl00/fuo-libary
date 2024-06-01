@@ -72,5 +72,4 @@ const Search = () => {
     </div>
   );
 };
-
-export default Search;
+export default Search
