@@ -53,7 +53,7 @@ const AddBook = () => {
   return (
     <div className="">
 
-        {!barcodeData ? (
+        {barcodeData ? (
  <div className='p-4 flex flex-col items-center justify-center gap-4'>
  <div className="flex flex-col items-center justify-center  ">
  <h1 className='text-2xl font-bold '>Add <span className='text-green-400'>Book</span></h1>

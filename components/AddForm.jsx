@@ -1,9 +1,9 @@
 "use client"
- 
+import { useToast } from "@/components/ui/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
- 
+ import { addDoc, collection } from 'firebase/firestore'
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -15,26 +15,54 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { db } from "@/lib/firebase"
+import { useRouter } from "next/navigation"
+import { Loader } from 'lucide-react'
+import { useState } from "react"
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+ barcode: z.string(),
+ name: z.string(),
+ author: z.string(),
 })
+ 
+
 const AddForm = ({barcode}) => {
 
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const [isLoading, setIsLoading] = useState(false)
   // 1. Define your form.
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      barcode: "",
+      name: "",
+      author: "",
     },
   })
  
   // 2. Define a submit handler.
-  function onSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+ const  onSubmit = async (values) => {
+ try {
+  setIsLoading(true);
+     await addDoc(collection(db, 'books'), {
+      name: values.name,
+      barcode: barcode,
+      author: values.author
+     }).then((res) => {
+      router.push('/')
+      toast({
+        title: "Successful",
+        description: `Book ${barcode} has been added successfully`,
+      })
+      setIsLoading(false);
+     })
+  
+ } catch (error) {
+  console.log(error)
+ }
     console.log(values)
   }
 
@@ -60,7 +88,7 @@ const AddForm = ({barcode}) => {
         />
         <FormField
           control={form.control}
-          name="video"
+          name="name"
           render={({ field }) => (
             <FormItem className='w-full'>
               <FormLabel>Book Name</FormLabel>
@@ -78,7 +106,7 @@ const AddForm = ({barcode}) => {
          <div className="flex flex-col gap-5 md:flex-row">
         <FormField
           control={form.control}
-          name="barcode"
+          name="author"
           render={({ field }) => (
             <FormItem className='w-full'>
               <FormLabel>Author</FormLabel>
@@ -93,9 +121,19 @@ const AddForm = ({barcode}) => {
         />
        
          </div>
-      <Button type="submit"
+         {!isLoading ? (
+          <Button type="submit" 
       className='bg-green-400 hover:bg-green-300'
       >Submit</Button>
+         )  : (
+          <Button type="submit" 
+      className='bg-green-400 hover:bg-green-300'
+      disabled
+      >
+        <Loader className="mr-2 h-4 w-4 animate-spin" />
+        Submiting...</Button>
+         )
+        }
     </form>
   </Form>
   </div>

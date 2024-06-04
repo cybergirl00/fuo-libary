@@ -51,8 +51,6 @@ const Search = () => {
 
   return (
     <div className="">
-
-
     <div className='p-4 flex flex-col items-center justify-center gap-4'>
       <div className="flex flex-col items-center justify-center  ">
       <h1 className='text-2xl font-bold '>Barcode <span className='text-green-400'>Scanner</span></h1>

@@ -1,12 +1,4 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import BookList from "../BookList"
 import { Button } from "../ui/button"
 import Link from "next/link"
 
@@ -27,25 +19,8 @@ const HomeScreen = () => {
       </div>
 
 
-{/* Table  */}
-      <Table  >
-  <TableCaption>A list available books in the libary</TableCaption>
-  <TableHeader>
-    <TableRow>
-      <TableHead className="w-[100px]">Name</TableHead>
-      <TableHead>Genre</TableHead>
-      <TableHead>Status</TableHead>
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    
-    <TableRow>
-      <TableCell className="font-medium">Harry Potter</TableCell>
-      <TableCell>Action</TableCell>
-      <TableCell>Availabe</TableCell>
-    </TableRow>
-  </TableBody>
-</Table>
+{/* Book  */}
+  <BookList />
 
     </div>
   )
