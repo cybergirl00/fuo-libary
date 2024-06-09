@@ -3,8 +3,8 @@ import Navbar from "@/components/Navbar"
 const layout = ({children}) => {
   return (
     <div>
-      <Navbar />
-      {children}</div>
+        <Navbar />
+        {children}</div>
   )
 }
 

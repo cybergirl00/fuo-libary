@@ -9,16 +9,24 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Link from "next/link";
+import Image from "next/image";
 
 const Navbar = () => {
   return (
     <div className="flex xl:hidden sm:hidden items-center justify-between p-5 sticky z-10 top-0">
       <div className="">
-        LOGO
+        <Image
+         src='/logo.jpg'
+         width={50}
+         height={50}
+         alt='logo'
+         />
       </div>
 
       <div className="flex gap-2">
-        <Button className='bg-green-400 hover:bg-green-300'>Add Books</Button>
+        <Button className='bg-green-400 hover:bg-green-300'>
+          <Link href={'/addbook'}>Add Books</Link>
+        </Button>
 
         <Sheet>
           <SheetTrigger>

@@ -15,6 +15,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <div className="flex gap-5">
       <Sidebar />
+      
       <main className="w-full">
       {children}
       </main>

@@ -50,7 +50,8 @@ const AddForm = ({barcode}) => {
      await addDoc(collection(db, 'books'), {
       name: values.name,
       barcode: barcode,
-      author: values.author
+      author: values.author,
+      status: 'Available'
      }).then((res) => {
       router.push('/')
       toast({

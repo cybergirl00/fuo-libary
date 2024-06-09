@@ -1,3 +1,4 @@
+"use client"
 import {
     Table,
     TableBody,
@@ -8,29 +9,24 @@ import {
     TableRow,
   } from "@/components/ui/table"
 import Link from "next/link"
-  const BookList = () => {
+import { useEffect, useState } from "react"
+import { getDocs, collection } from 'firebase/firestore'
+import { db } from "@/lib/firebase"
+import { Button } from "./ui/button"
+const BookList = () => {
+    const [books, setBooks] = useState([])
 
-    const tableData = [
-        {
-            title: 'Name',
-            barcode: '99999999',
-            name: 'Damilola',
-            author: 'Mansurat',
-            
-        },
-        {
-            barcode: '99999999',
-            title: 'Name',
-            name: 'Damilola',
-            author: 'Mansurat',
-        },
-        {
-            barcode: '99999999',
-            title: 'Name',
-            name: 'Damilola',
-            author: 'Mansurat',
-        },
-    ]
+    useEffect(() => {
+      const getBooks = async () => {
+        const data = await getDocs(collection(db, 'books'))
+        setBooks(data.docs.map((doc) => ({
+          ...doc.data(), id:doc.id
+        })))
+        console.log(data)
+      }
+      getBooks();
+    }, [])
+    
   return (
     <div>
             <Table  >
@@ -41,15 +37,26 @@ import Link from "next/link"
       <TableHead className="w-[100px]">Name</TableHead>
       <TableHead>Author</TableHead>
       <TableHead>Status</TableHead>
+      <TableHead>Action</TableHead>
     </TableRow>
   </TableHeader>
   <TableBody>
-  {tableData.map((row, index) => (
+  {books.map((row, index) => (
             <TableRow key={index}>
-              <TableCell className="font-medium">{row.barcode}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.author}</TableCell>
+              
+              <TableCell className="font-medium">{row?.barcode}</TableCell>
+              <TableCell
+              className="line-clamp-1"
+              >{row?.name}</TableCell>
+              <TableCell>{row?.author}</TableCell>
               <TableCell>Available</TableCell>
+              <TableCell>
+                <Button variant='outline'>
+                  <Link href={'/book/'+ row?.id}>
+                  View
+                  </Link>
+                   </Button>
+              </TableCell>
             </TableRow>
           ))}
   </TableBody>
