@@ -43,13 +43,16 @@ const BookList = () => {
   <TableBody>
   {books.map((row, index) => (
             <TableRow key={index}>
-              
               <TableCell className="font-medium">{row?.barcode}</TableCell>
               <TableCell
               className="line-clamp-1"
               >{row?.name}</TableCell>
               <TableCell>{row?.author}</TableCell>
-              <TableCell>Available</TableCell>
+              <TableCell
+              className={
+                row?.status === 'Unavailable' ? 'text-red-400' : 'text-green-400' 
+                           }
+              >{row?.status}</TableCell>
               <TableCell>
                 <Button variant='outline'>
                   <Link href={'/book/'+ row?.id}>

@@ -78,7 +78,11 @@ const Search = () => {
               className="line-clamp-1"
               >{book.name}</TableCell>
               <TableCell>{book.author}</TableCell>
-              <TableCell>Available</TableCell>
+              <TableCell
+              className={
+                book?.status === 'Unavailable' ? 'text-red-400' : 'text-green-400' 
+                           }
+              >{book?.status}</TableCell>
               <TableCell>
                 <Button variant='outline'>
                   <Link href={'/book/'+ book?.id}>
