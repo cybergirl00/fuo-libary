@@ -30,7 +30,7 @@ const BookList = () => {
   return (
     <div>
             <Table  >
-  <TableCaption>A list available books in the libary</TableCaption>
+  {/* <TableCaption>A list available books in the libary</TableCaption> */}
   <TableHeader>
     <TableRow>
     <TableHead className="w-[100px]">Barcode</TableHead>

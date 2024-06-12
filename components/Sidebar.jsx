@@ -1,9 +1,18 @@
+"use client"
 import { Home, Search, Book, LogOut } from 'lucide-react'
 import MobileNav from './MobileNav'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 const Sidebar = () => {
+
+    const type = usePathname().split('/')[1]
+    console.log(type)
+
+
+    if (type != 'sign-in')
     return (
         <div>
+
         <div className="border h-screen flex-col gap-5 p-3 justify-center hidden xl:flex sticky">
             <div className="p-3">
                 {/* Logo */}

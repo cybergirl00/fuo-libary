@@ -38,7 +38,8 @@ const formSchema = z.object({
  
 
 const StudentDetails = ({id}) => {
-    const [isloading, setisLoading] = useState(false)
+    const [isloading, setisLoading] = useState(false);
+    const [isDone, setisDone] = useState(false);
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -62,6 +63,7 @@ const StudentDetails = ({id}) => {
             bookId: id
         }).then((res) => {
             setisLoading(false)
+            setisDone(true)
             updateDoc(doc(db, 'books', id), {
                 status: 'Unavailable'
             })
@@ -179,6 +181,13 @@ const StudentDetails = ({id}) => {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className=" p-0" align="start">
+                <Calendar
+          mode="single"
+          selected={field.value}
+          onSelect={field.onChange}
+          initialFocus
+        />
+{/*                   
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -187,7 +196,9 @@ const StudentDetails = ({id}) => {
                       date > new Date() || date < new Date("1900-01-01")
                     }
                     initialFocus
-                  />
+                  /> */}
+
+
                 </PopoverContent>
               </Popover>
               <FormMessage />
