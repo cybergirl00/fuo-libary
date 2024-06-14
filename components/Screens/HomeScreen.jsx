@@ -3,7 +3,7 @@ import { Button } from "../ui/button"
 import Link from "next/link"
 
 
-const HomeScreen = () => {
+const HomeScreen = ({user}) => {
     const data = null
   return (
     <div className="flex flex-col gap-5 px-7 py-7">
