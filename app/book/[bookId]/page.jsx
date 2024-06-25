@@ -149,7 +149,9 @@ const BookDetails = () => {
     </DialogHeader>
 
     <div className="">
-     <StudentDetails id={pathname}/>
+     <StudentDetails id={pathname}
+     book={book}
+     />
     </div>
   </DialogContent>
 </Dialog>

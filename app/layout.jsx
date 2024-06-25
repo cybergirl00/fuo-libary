@@ -14,9 +14,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex ">
+        <div className="flex">
       <Sidebar />
-      <main className="flex-grow lg:ml-64 p-4">
+      <main className="flex-grow p-4 lg:ml-64">
       {children}
       </main>
         </div>

@@ -102,11 +102,3 @@ const Search = () => {
 };
 
 export default Search;
-
-
-
-{/* <div key={book.id}>
-<h2>{book.name}</h2>
-<p>{book.author}</p>
-<p>{book.barcode}</p>
-</div> */}

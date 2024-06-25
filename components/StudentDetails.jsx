@@ -37,9 +37,10 @@ const formSchema = z.object({
 })
  
 
-const StudentDetails = ({id}) => {
+const StudentDetails = ({id, book}) => {
     const [isloading, setisLoading] = useState(false);
     const [isDone, setisDone] = useState(false);
+    const [assign, setAssign] = useState(false)
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -54,7 +55,9 @@ const StudentDetails = ({id}) => {
       // 2. Define a submit handler.
       const onSubmit = async (values) =>  {
         setisLoading(true)
-        await addDoc(collection(db, "borrowed"), {
+        setAssign(false)
+        try {
+          await addDoc(collection(db, "borrowed"), {
             fullName: values.fullName,
             matricNo: values.matricNo,
             phoneNo: values.phone,
@@ -62,13 +65,19 @@ const StudentDetails = ({id}) => {
             datereturned: values.datereturned,
             bookId: id
         }).then((res) => {
+          setAssign(true);
             setisLoading(false)
             setisDone(true)
             updateDoc(doc(db, 'books', id), {
                 status: 'Unavailable'
+            }).then((res) => {
             })
         })
         console.log(values)
+        } catch (err) {
+          console.log(err)
+        }
+       
       }
   return (
     <ScrollArea className="p-4">
@@ -187,18 +196,6 @@ const StudentDetails = ({id}) => {
           onSelect={field.onChange}
           initialFocus
         />
-{/*                   
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
-                    initialFocus
-                  /> */}
-
-
                 </PopoverContent>
               </Popover>
               <FormMessage />
@@ -212,7 +209,16 @@ const StudentDetails = ({id}) => {
  Please wait...
 </Button>
       ) : (
-        <Button type="submit" className='bg-green-400 hover:bg-green-300'>Submit</Button>
+        <div className="">
+          {assign === false ? (
+
+             <Button type="submit" className='bg-green-400 hover:bg-green-300'>Submit</Button>
+          ) : (
+            <h1>This book </h1>
+          )
+        }
+        </div>
+        
       )}
       </form>
     </Form>
