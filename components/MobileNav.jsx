@@ -33,11 +33,11 @@ const MobileNav = ({userData}) => {
               <Search color={pathname === '/search' ? 'white' : 'green'} size={30} />
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link href="/history" className={`hover:bg-gray-100 rounded-sm  flex flex-col items-center  cursor-pointer p-2 ${pathname === '/history' ? 'bg-green-400 text-white' : 'text-gray-900 hover:bg-gray-100 hover:text-black'}`}>
               <Book color={pathname === '/history' ? 'white' : 'green'} size={30} />
             </Link>
-          </li>
+          </li> */}
 
           {userData?.head === true && (
             <li className="hover:bg-gray-100 rounded-sm  flex flex-col items-center  cursor-pointer p-2">

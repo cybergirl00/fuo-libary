@@ -91,12 +91,12 @@ const Navbar = () => {
               Search
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link href="/history" className={`w-full cursor-pointer p-2 rounded-sm flex items-center gap-2 ${pathname === '/history' ? 'bg-green-400 text-white' : 'text-gray-900 hover:bg-gray-100 hover:text-black'}`}>
               <Book color={pathname === '/history' ? 'white' : 'green'} size={20} />
               History
             </Link>
-          </li>
+          </li> */}
 
           {userData?.head === true && (
             <li>

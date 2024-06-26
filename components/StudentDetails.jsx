@@ -214,7 +214,7 @@ const StudentDetails = ({id, book}) => {
 
              <Button type="submit" className='bg-green-400 hover:bg-green-300'>Submit</Button>
           ) : (
-            <h1>This book </h1>
+            <h1 className='text-bold text-red-400'>This book has been assigned to a student </h1>
           )
         }
         </div>
