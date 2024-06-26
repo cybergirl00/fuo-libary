@@ -3,11 +3,17 @@ import Image from "next/image"
 import Link from "next/link"
 import { Home, Search, Book, LogOut, PlusIcon } from 'lucide-react'
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 const MobileNav = ({userData}) => {
+  const router = useRouter();
     const pathname = usePathname();
-   
+    const handleLogout = async () => {
+      await signOut(auth).then((res) => {
+        localStorage.clear('fuo-id');
+        router.push('/sign-in')
+      })
+    }
   return (
     <div className="">
     <div className="border h-screen">
@@ -47,7 +53,9 @@ const MobileNav = ({userData}) => {
             </li>
           )}
 
-<li className="hover:bg-gray-100 rounded-sm  flex flex-col items-center  cursor-pointer p-2">
+<li className="hover:bg-gray-100 rounded-sm  flex flex-col items-center  cursor-pointer p-2"
+onClick={handleLogout}
+>
                 <LogOut color='red' size={25} />
             </li>
         </ul>

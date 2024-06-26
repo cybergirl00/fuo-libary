@@ -14,13 +14,21 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
+import { signOut } from "firebase/auth";
 
 const Navbar = () => {
   const [userData, setUserData] = useState(null);
   const pathname = usePathname();
   const router = useRouter();
   const userId = typeof window !== 'undefined' ? localStorage.getItem('fuo-id') : null;
+
+  const handleLogout = async () => {
+    await signOut(auth).then((res) => {
+      localStorage.clear('fuo-id');
+      router.push('/sign-in')
+    })
+  }
 
   useEffect(() => {
       if (!userId) {
@@ -108,7 +116,9 @@ const Navbar = () => {
           )}
             </ul>
 
-            <div className="mt-auto cursor-pointer flex gap-2 items-center p-7">
+            <div className="mt-auto cursor-pointer flex gap-2 items-center p-7"
+            onClick={handleLogout}
+            >
               <LogOut color='red' size={25} />
               <div className="">
                 <h2 className="font-bold">{userData?.name}</h2>
