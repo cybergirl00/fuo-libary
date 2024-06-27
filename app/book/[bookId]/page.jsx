@@ -46,7 +46,7 @@ import { useToast } from "@/components/ui/use-toast"
     // DeleteBook
     const handleDelete = async () => {
       try {
-      await deleteDoc(db, 'books', pathname).then((res) => {
+      await deleteDoc(doc(db, 'books', pathname)).then((res) => {
         router.push('/')
         toast({
           variant: "destructive",
@@ -55,9 +55,10 @@ import { useToast } from "@/components/ui/use-toast"
         })   
       })
     } catch(err) {
+      console.log(err)
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
+        title: "Error deleting document: ",
         description: err.message || err.toString(),
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       })
