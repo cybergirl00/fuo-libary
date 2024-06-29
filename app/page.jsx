@@ -2,14 +2,15 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import HomeScreen from "@/components/Screens/HomeScreen";
-import { db } from "@/lib/firebase";
+import { db, auth } from "@/lib/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { redirect, useRouter } from "next/navigation";
 
 const Page = () => {
   const [userData, setUserData] = useState(null);
 
-  const userId = typeof window !== 'undefined' ? localStorage.getItem("fuo-id") : null;
+  const userId = auth?.currentUser?.uid
+  // typeof window !== 'undefined' ? localStorage.getItem("fuo-id") : null;
   console.log(userId)
   if (!userId) {
     if (typeof window !== 'undefined') {
