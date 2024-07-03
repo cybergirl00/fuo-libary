@@ -27,7 +27,7 @@ const formSchema = z.object({
 })
  
 
-const AddForm = ({barcode}) => {
+const AddForm = ({isbn}) => {
 
   const router = useRouter();
   const { toast } = useToast();
@@ -49,14 +49,14 @@ const AddForm = ({barcode}) => {
   setIsLoading(true);
      await addDoc(collection(db, 'books'), {
       name: values.name,
-      barcode: barcode,
+      barcode: isbn,
       author: values.author,
       status: 'Available'
      }).then((res) => {
       router.push('/')
       toast({
         title: "Successful",
-        description: `Book ${barcode} has been added successfully`,
+        description: `Book ${isbn} has been added successfully`,
       })
       setIsLoading(false);
      })
@@ -79,7 +79,7 @@ const AddForm = ({barcode}) => {
             <FormItem className='w-full'>
               <FormLabel>Barcode</FormLabel>
               <FormControl>
-              <Input placeholder="barcode" {...field} disabled value={barcode && barcode}
+              <Input placeholder="barcode" {...field} disabled value={isbn && isbn}
                className='bg-gray-50 h-[54px] focus-visible:ring-offset-0 placeholder:text-gray-500 rounded-full p-regular-16 px-4 py-3 border-none focus-visible:ring-transparent !important'
               />
               </FormControl>

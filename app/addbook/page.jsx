@@ -7,6 +7,7 @@ import AddForm from '@/components/AddForm';
 
 const AddBook = () => {
   const [isbnData, setIsbnData] = useState(null);
+  const [barcodeData, setBarcodeData] = useState(null);
   const [error, setError] = useState(null);
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
@@ -17,6 +18,7 @@ const AddBook = () => {
     processImage(imageSrc);
   };
 
+
   const processImage = (imageSrc) => {
     const img = new Image();
     img.src = imageSrc;
@@ -24,6 +26,8 @@ const AddBook = () => {
     img.onload = () => {
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d', { willReadFrequently: true });
+      canvas.width = img.width;
+      canvas.height = img.height;
       context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
       Quagga.decodeSingle({
@@ -34,33 +38,92 @@ const AddBook = () => {
         },
         decoder: {
           readers: [
-            'ean_reader', // For EAN-13 which includes ISBN-13
+            'code_128_reader',
+            'ean_reader',
+            'ean_8_reader',
+            'code_39_reader',
+            'code_39_vin_reader',
+            'codabar_reader',
+            'upc_reader',
             'upc_e_reader',
-            'upc_reader'
+            'i2of5_reader'
           ],
         },
-        locate: true,
-      }, (result) => {
+        debug: {
+          drawBoundingBox: true,
+          showFrequency: true,
+          drawScanline: true,
+          showPattern: true
+        },
+        locate: true
+      }, async (result) => {
         if (result && result.codeResult) {
+          console.log('Barcode detected:', result.codeResult.code);
+          console.log(result.codeResult.code)
           setIsbnData(result.codeResult.code);
         } else {
-          setError('No ISBN detected.');
+          console.log('No barcode detected.');
+          setError('No barcode detected.');
         }
       });
     };
   };
+  // const processImage = (imageSrc) => {
+  //   const img = new Image();
+  //   img.src = imageSrc;
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  //   img.onload = () => {
+  //     const canvas = canvasRef.current;
+  //     const context = canvas.getContext('2d', { willReadFrequently: true });
+  //     context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  //     Quagga.decodeSingle({
+  //       src: canvas.toDataURL(),
+  //       numOfWorkers: 0,
+  //       inputStream: {
+  //         size: 800,
+  //       },
+  //       decoder: {
+  //         readers: [
+  //           'ean_reader', // For EAN-13 which includes ISBN-13
+  //           'upc_e_reader',
+  //           'upc_reader'
+  //         ],
+  //       },
+  //       locate: true,
+  //     }, (result) => {
+  //       if (result && result.codeResult) {
+  //         setIsbnData(result.codeResult.code);
+  //       } else {
+  //         setError('No ISBN detected.');
+  //       }
+  //     });
+  //   };
+  // };
+
+  // const handleFileChange = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       processImage(e.target.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+
+
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        processImage(e.target.result);
+      reader.onload = () => {
+        processImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
-
   const triggerFileInput = () => {
     fileInputRef.current.click();
   };
@@ -88,7 +151,7 @@ const AddBook = () => {
             <Button onClick={captureAndDecode} className='bg-green-400 hover:bg-green-300'>Capture</Button>
           </div>
           <div className="pt-5">
-            <Button onClick={triggerFileInput} className='bg-green-400 hover:bg-green-300'>Upload Image</Button>
+            <Button onClick={() => fileInputRef.current.click()} className='bg-green-400 hover:bg-green-300'>Upload Image</Button>
             <input
               type="file"
               accept="image/*"
@@ -109,6 +172,6 @@ const AddBook = () => {
       )}
     </div>
   );
-}
+}  
 
 export default AddBook;
