@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import {
   Table,
@@ -14,10 +14,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { usePathname, useRouter } from "next/navigation";
 const Search = () => {
   const [books, setBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredBooks, setFilteredBooks] = useState([]);
+  const [userData, setUserData] = useState(null);
+  const pathname = usePathname();
+  const router = useRouter();
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('fuo-id') : null;
 
   useEffect(() => {
     const getBooks = async () => {
@@ -38,6 +43,38 @@ const Search = () => {
       )
     );
   }, [searchQuery, books]);
+
+  useEffect(() => {
+    if (!userId) {
+      if (typeof window !== 'undefined') {
+        // router.push('/sign-in');
+      }
+      return;
+    }
+
+    const fetchUser = async () => {
+      try {
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, where('userId', '==', userId));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          console.log('No matching documents.');
+          // router.push('/sign-in'); // Redirect if no user found
+          return;
+        }
+
+        querySnapshot.forEach((doc) => {
+          setUserData(doc.data());
+          console.log(doc.data());
+        });
+      } catch (err) {
+        console.error('Error getting documents: ', err);
+      }
+    };
+
+    fetchUser();
+  }, [userId, router]);
 
   return (
     <div className="w-full">
@@ -65,7 +102,9 @@ const Search = () => {
       <TableHead className="w-[100px]">Name</TableHead>
       <TableHead>Author</TableHead>
       <TableHead>Status</TableHead>
-      <TableHead>Action</TableHead>
+      {userData != null && (
+ <TableHead>Action</TableHead>
+      )}
     </TableRow>
   </TableHeader>
         {filteredBooks.length > 0 ? (
@@ -83,12 +122,14 @@ const Search = () => {
                 book?.status === 'Unavailable' ? 'text-red-400' : 'text-green-400' 
                            }
               >{book?.status}</TableCell>
-              <TableCell>
-                <Button variant='outline'>
-                  <Link href={'/book/'+ book?.id}>
-                  View
-                  </Link> </Button>
-              </TableCell>
+              {userData != null && (
+  <TableCell>
+  <Button variant='outline'>
+    <Link href={'/book/'+ book?.id}>
+    View
+    </Link> </Button>
+</TableCell>
+              )}
             </TableRow>
   </TableBody>
           ))
