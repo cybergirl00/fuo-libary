@@ -34,6 +34,7 @@ const formSchema = z.object({
   phone: z.string(),
   dateborrowed: z.date(),
   datereturned: z.date(),
+  index: z.string(),
 })
  
 
@@ -49,6 +50,7 @@ const StudentDetails = ({id, book}) => {
           phone: "",
           dateborrowed: "",
           datereturned: "",
+          index: ""
         },
       })
      
@@ -59,6 +61,7 @@ const StudentDetails = ({id, book}) => {
         try {
           await addDoc(collection(db, "borrowed"), {
             fullName: values.fullName,
+            index: values.index,
             matricNo: values.matricNo,
             phoneNo: values.phone,
             dateborrowed: values.dateborrowed,
@@ -83,6 +86,19 @@ const StudentDetails = ({id, book}) => {
     <ScrollArea className="p-4">
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="index"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Book index</FormLabel>
+              <FormControl>
+                <Input placeholder="Book Index" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="fullName"

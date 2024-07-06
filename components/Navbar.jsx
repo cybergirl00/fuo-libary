@@ -75,9 +75,11 @@ const Navbar = () => {
       </div>
 
       <div className="flex gap-2">
-        <Button className='bg-green-400 hover:bg-green-300'>
-          <Link href={'/addbook'}>Add Books</Link>
-        </Button>
+        {userData != null && (
+ <Button className='bg-green-400 hover:bg-green-300'>
+ <Link href={'/addbook'}>Add Book</Link>
+</Button>
+        )}
 
         <Sheet>
           <SheetTrigger>
@@ -99,12 +101,6 @@ const Navbar = () => {
               Search
             </Link>
           </li>
-          {/* <li>
-            <Link href="/history" className={`w-full cursor-pointer p-2 rounded-sm flex items-center gap-2 ${pathname === '/history' ? 'bg-green-400 text-white' : 'text-gray-900 hover:bg-gray-100 hover:text-black'}`}>
-              <Book color={pathname === '/history' ? 'white' : 'green'} size={20} />
-              History
-            </Link>
-          </li> */}
 
           {userData?.head === true && (
             <li>
