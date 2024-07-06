@@ -1,6 +1,6 @@
 "use client"
 import { Button } from "./ui/button";
-import { Book, Home, LogOut, Menu, PlusIcon, Search } from 'lucide-react';
+import { Book, Home, LockIcon, LogOut, Menu, PlusIcon, Search } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -33,7 +33,7 @@ const Navbar = () => {
   useEffect(() => {
       if (!userId) {
         if (typeof window !== 'undefined') {
-          router.push('/sign-in');
+          // router.push('/sign-in');
         }
         return;
       }
@@ -46,7 +46,7 @@ const Navbar = () => {
   
           if (querySnapshot.empty) {
             console.log('No matching documents.');
-            router.push('/sign-in'); // Redirect if no user found
+            // router.push('/sign-in'); // Redirect if no user found
             return;
           }
   
@@ -116,14 +116,26 @@ const Navbar = () => {
           )}
             </ul>
 
-            <div className="mt-auto cursor-pointer flex gap-2 items-center p-7"
-            onClick={handleLogout}
-            >
-              <LogOut color='red' size={25} />
-              <div className="">
-                <h2 className="font-bold">{userData?.name}</h2>
-                <p className="text-gray-500 text-sm font-light">{userData?.email}</p>
-              </div>
+            <div className="mt-auto cursor-pointer flex gap-2 items-center p-7"  >
+              {userData === null ? (
+          <Button className='bg-green-400  flex gap-2 items-center justify-center hover:bg-green-300' asChild>
+            <Link href={'/sign-in'}>
+            <LockIcon color="black" size={17} />
+            Login as Admin
+            </Link>
+            </Button>
+        ) : (
+          <div className=""
+          onClick={handleLogout}>
+{/* Avatar */}
+<LogOut color="red" size={25} />
+          <div>
+            <h2 className="font-bold">{userData?.name}</h2>
+            <p className="text-gray-500 text-sm font-light">{userData?.email}</p>
+          </div>
+          </div>
+        )
+      }
             </div>
           </SheetContent>
         </Sheet>

@@ -1,5 +1,5 @@
 "use client";
-import { Home, Search, Book, LogOut, PlusIcon } from 'lucide-react';
+import { Home, Search, Book, LogOut, PlusIcon, LockIcon } from 'lucide-react';
 import MobileNav from './MobileNav';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { useRouter, usePathname, redirect } from 'next/navigation';
 import { signOut } from 'firebase/auth';
+import { Button } from './ui/button';
 
 const Sidebar = () => {
   const [userData, setUserData] = useState(null);
@@ -26,7 +27,8 @@ const Sidebar = () => {
   useEffect(() => {
     if (!userId) {
       if (typeof window !== 'undefined') {
-        router.push('/sign-in');
+        // router.push('/sign-in');
+        console.log('No admin')
       }
       return;
     }
@@ -39,7 +41,7 @@ const Sidebar = () => {
 
         if (querySnapshot.empty) {
           console.log('No matching documents.');
-          router.push('/sign-in'); // Redirect if no user found
+          // router.push('/sign-in'); // Redirect if no user found
           return;
         }
 
@@ -102,16 +104,34 @@ const Sidebar = () => {
         </ul>
 
         {/* Bottom Nav */}
-        <div className="mt-auto cursor-pointer flex gap-2 items-center"
-        onClick={handleLogout}
-        >
-          {/* Avatar */}
-          <LogOut color="red" size={25} />
+
+{/* Login button */}
+
+        {/* Logout button */}
+        <div className="mt-auto cursor-pointer flex gap-2 items-center" >
+
+        {userData === null ? (
+          <Button className='bg-green-400  flex gap-2 items-center justify-center hover:bg-green-300' asChild>
+            <Link href={'/sign-in'}>
+            <LockIcon color="black" size={17} />
+            Login as Admin
+            </Link>
+            </Button>
+        ) : (
+          <div className=""
+          onClick={handleLogout}>
+{/* Avatar */}
+<LogOut color="red" size={25} />
           <div>
             <h2 className="font-bold">{userData?.name}</h2>
             <p className="text-gray-500 text-sm font-light">{userData?.email}</p>
           </div>
+          </div>
+        )
+      }
         </div>
+
+        
       </div>
 
       <div className="hidden lg:flex sm:hidden xl:hidden">

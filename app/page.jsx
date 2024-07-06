@@ -8,16 +8,9 @@ import { redirect, useRouter } from "next/navigation";
 
 const Page = () => {
   const [userData, setUserData] = useState(null);
-
   const userId = auth?.currentUser?.uid
   // typeof window !== 'undefined' ? localStorage.getItem("fuo-id") : null;
   console.log(userId)
-  if (!userId) {
-    if (typeof window !== 'undefined') {
-      redirect('/sign-in');
-    }
-    return null;
-  }
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -27,7 +20,7 @@ const Page = () => {
 
         if (querySnapshot.empty) {
           console.log('No matching documents.');
-          router.push('/sign-in'); // Redirect if no user found
+          // router.push('/sign-in'); // Redirect if no user found
           return;
         }
 

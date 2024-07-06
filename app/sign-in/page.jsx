@@ -17,6 +17,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { auth } from "@/lib/firebase"
 import { ToastAction } from "@/components/ui/toast"
 import { Loader } from 'lucide-react'
+import Link from "next/link"
 
 
 const SignIn = () => {
@@ -87,6 +88,10 @@ const SignIn = () => {
         >Sign in</Button>
         }
       </CardFooter>
+
+      <Link href={'/'} className="p-2 text-blue-600 underline cursor-pointer hover:no-underline" >
+        Continue as a student
+      </Link>
     </Card>
   )
 }

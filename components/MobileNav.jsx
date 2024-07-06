@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import Link from "next/link"
-import { Home, Search, Book, LogOut, PlusIcon } from 'lucide-react'
+import { Home, Search, Book, LogOut, PlusIcon, LockIcon } from 'lucide-react'
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -52,12 +52,22 @@ const MobileNav = ({userData}) => {
               </Link>
             </li>
           )}
-
+        
+{userData === null ? 
+  <li className="hover:bg-gray-100 rounded-sm  flex flex-col items-center  cursor-pointer p-2">
+    <Link href='/sign-in'>
+    <LockIcon color='green' size={25} />
+    </Link>
+                
+            </li>
+: 
 <li className="hover:bg-gray-100 rounded-sm  flex flex-col items-center  cursor-pointer p-2"
 onClick={handleLogout}
 >
                 <LogOut color='red' size={25} />
             </li>
+}
+
         </ul>
      
         </div>

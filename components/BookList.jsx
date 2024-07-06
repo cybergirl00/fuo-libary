@@ -13,7 +13,7 @@ import { useEffect, useState } from "react"
 import { getDocs, collection } from 'firebase/firestore'
 import { db } from "@/lib/firebase"
 import { Button } from "./ui/button"
-const BookList = () => {
+const BookList = ({user}) => {
     const [books, setBooks] = useState([])
 
     useEffect(() => {
@@ -37,7 +37,10 @@ const BookList = () => {
       <TableHead className="w-[100px]">Name</TableHead>
       <TableHead>Author</TableHead>
       <TableHead>Status</TableHead>
-      <TableHead>Action</TableHead>
+      {user != null && (
+        <TableHead>Action</TableHead>
+      )}
+      
     </TableRow>
   </TableHeader>
   <TableBody>
@@ -53,13 +56,15 @@ const BookList = () => {
                 row?.status === 'Unavailable' ? 'text-red-400' : 'text-green-400' 
                            }
               >{row?.status}</TableCell>
-              <TableCell>
-                <Button variant='outline'>
-                  <Link href={'/book/'+ row?.id}>
-                  View
-                  </Link>
-                   </Button>
-              </TableCell>
+              {user != null && (
+ <TableCell>
+ <Button variant='outline'>
+   <Link href={'/book/'+ row?.id}>
+   View
+   </Link>
+    </Button>
+</TableCell>
+              )}
             </TableRow>
           ))}
   </TableBody>

@@ -3,7 +3,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
- import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection } from 'firebase/firestore'
 import { Button } from "@/components/ui/button"
 import {
   Form,

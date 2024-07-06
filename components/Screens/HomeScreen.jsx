@@ -4,23 +4,26 @@ import Link from "next/link"
 
 
 const HomeScreen = ({user}) => {
-    const data = null
+   console.log(user)
   return (
     <div className="flex flex-col gap-5 px-7 py-7">
 
       {/* Books  */}
       <div className="flex flex-row justify-between items-center">
         <h2 className="text-3xl font-bold">Available <span className='text-green-400'>Books.</span></h2>
-        <Button className='bg-green-400 hover:bg-green-300 hidden xl:flex sm:flex' asChild>
+        {user != null && (
+          <Button className='bg-green-400 hover:bg-green-300 hidden xl:flex sm:flex' asChild>
           <Link href={'/addbook'}>
           Add book to shelf
           </Link>
 </Button>
+      )}
+      
       </div>
 
 
 {/* Book  */}
-  <BookList />
+  <BookList user={user}/>
 
     </div>
   )
